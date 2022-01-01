@@ -1,4 +1,7 @@
 *.atfi
+README
+bare_adv.tex
+changelog.txt
 
 # Created by https://www.toptal.com/developers/gitignore/api/linux,windows,macos,latex,visualstudiocode,intellij+all,images
 # Edit at https://www.toptal.com/developers/gitignore?templates=linux,windows,macos,latex,visualstudiocode,intellij+all,images
