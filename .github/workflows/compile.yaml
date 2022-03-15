@@ -23,13 +23,13 @@ jobs:
         echo "tx-default" | sltx docker
     - name: ''
       run: |
-        sltx compile --root --profile "tx-default" "atsfp-florian.sihler.tex"
-        pdftoppm -png -f 1 -l 1 ./atsfp-florian.sihler.pdf preview
+        sltx compile --root --profile "tx-default" "atsfp-florian-sihler.tex"
+        pdftoppm -png -f 1 -l 1 ./atsfp-florian-sihler.pdf preview
     - name: Commit
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
-        git add -f "atsfp-florian.sihler.pdf" "preview-01.png"
+        git add -f "atsfp-florian-sihler.pdf" "preview-01.png"
         git commit -m "Newly compiled data"
     - name: Push changes
       uses: ad-m/github-push-action@master
