@@ -12,4 +12,4 @@ students, and iv ) revealing differences in code clones produced by experienced 
 code used, we make everything available online. We reveal various problems in reproducing existing code cloning benchmarks and find
 significant differences in the number of clones detected by different CCDTs.
 
-[<img src="https://github.com/Code-Clone-Detection-Images/Paper/blob/gh-pages/preview-01.png?raw=true" width="400"/>](https://media.githubusercontent.com/media/Code-Clone-Detection-Images/Paper/main/atsfp-florian-sihler.pdf)
+[<img src="https://github.com/Code-Clone-Detection-Images/Paper/blob/gh-pages/preview-01.png?raw=true" width="400"/>](https://github.com/Code-Clone-Detection-Images/Paper/raw/main/atsfp-florian-sihler.pdf)
