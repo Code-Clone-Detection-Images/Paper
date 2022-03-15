@@ -97,7 +97,6 @@ Code Clone Detection, Code Clones, Docker, Automation, Benchmark, Google Code Ja
 \IEEEraisesectionheading{\section{Introduction}\label{sec:introduction}}
 
 
-
 \IEEEPARstart{C}{ode clones} or code duplicates are widespread in software systems amounting to a fraction from~\qtyrange{7}{23}\percent~\cite{roy2009comparison,schulze2010code} or even up to \qty{30}\percent~\cite{wagner2013software,wagner2016functionally,kim2005empirical} of the complete codebase.
 Therefore, there exists a lot of research on detecting code clones and mitigating their harmful effects on software maintenance~\cite{juergens2009code}. This research produced a wide
 variety of (semi\nobreakdash-)automated tools and techniques thoroughly compared and evaluated by other studies~\cite{roy2009comparison,ain2019systematic}.
@@ -193,7 +192,7 @@ String helper(String[] es, int i) {
 \end{lstlisting}
 
 Additionally to those type-based separations, some researchers classify clones according to their location (i.e., their physical expanse), their attractiveness for refactorings (cf.~\cite{gautam2016various}) and the variations between them (cf.~\cite{gorg2017deriving}).
-However, we decided against including those metrics as we focus on the detection of \T4 clones and not, for example, on the identification of CFs applicable for refactoring.
+However, we decided against including those metrics as we focus on detecting \T4 clones and not, for example, on the identification of CFs applicable for refactoring.
 
 % \todo{Different definitions}
 
@@ -255,7 +254,7 @@ There already exists a large number of benchmarks regarding code clone detection
 However, the creators of this BigCloneBench separated the collected open-source Java projects based on their syntactical differences and judged their functional similarities by three judges.
 While this allows a higher level of confidence in the identified clones and provides an extensive database of larger projects, there are disadvantages:
 The identification process is error-prone, expensive, and relatively inflexible---the creation of \textsl{BigCloneBench} required 216 hours of manual validation only for the classification of clones in one language.
-Therefore, we have decided to use another dataset for the benchmark which is more flexible regarding the languages used and the amount of preparation work required.
+Therefore, we have decided to use another dataset for the benchmark, which is more flexible regarding the languages used and the amount of preparation work required.
 
 % \todo{Vorteile: menschlich geprüft und größeres Projekt, nNchteile: genannt}
 
@@ -342,10 +341,10 @@ All tools are summarized in \cref{tbl:tools} and are described below in greater 
 
 
 \subsubsection{CCCD}
-\label{expl:cccd}We selected CCCD (short for Concolic Code-Clone Detection) for two reasons. First, because it is a prominent \T4 code clone detection tools, and second, due to its interesting and novel approach of using concolic information~\cite{krutz2013code}.
+\label{expl:cccd}We selected CCCD (short for Concolic Code-Clone Detection) for two reasons. First, because it is a prominent \T4 code clone detection tool, and second, due to its interesting and novel approach of using concolic information~\cite{krutz2013code}.
 
 CCCD uses a twofold analysis of source code by analyzing it using a modified version of \textsl{CREST} (a concolic test generation tool for the C language) and \textsl{CTAGS} (a tool to extract function information from source code).
-Because CREST is restricted to the C language and a granularity of functions (i.e., it does not generate distinguishable concolic information inside of a function), CCCD itself is only capable of analyzing function clones inside of C programs.
+Because CREST is restricted to the C language and function-level (i.e., it does not generate distinguishable concolic information inside of a function), CCCD itself is only capable of analyzing function clones inside of C programs.
 
 After the preparation, CCCD compares the concolic output of CREST based on the function information provided by CTAGS by calculating the Levenshtein distance~\cite{levenshtein1966binary,al2021towards}. CCCD outputs a report of all function combinations alongside their distance (see \cref{fig:steps-cccd}).
 
@@ -428,7 +427,7 @@ We chose SourcererCC as it is a state-of-the-art token-based CCDT that \begin{in
 \label{fig:steps-sourcerercc}
 \end{figure}
 
-In order to speed up clone detection, SourcererCC first builds a partial index by using a simple Scanner to identify tokens and blocks in the source files and filtering them according to the tokens, the blocks may have in common.
+In order to speed up clone detection, SourcererCC first builds a partial index by using a simple Scanner to identify tokens and blocks in the source files and filtering them according to the tokens these blocks may have in common.
 By exploiting sorting, token frequency (similar to natural languages), and previous filters, runtime complexity for the candidate verification gets reduced from quadratic to linear time~\cite{SourcererCC}.
 Furthermore, by working with bags-of-tokens (arbitrarily ordered multisets of tokens) which abstract away distances between tokens, SourcererCC claims to be better in identifying \T3-clones than other code clone detection tools (as illustrated in \cref{fig:steps-sourcerercc}).
 
@@ -474,7 +473,7 @@ Afterwards, all information is combined and analyzed (searching for longest comm
 
 \subsection{Comparison}
 For each problem in the Google Code Jam and each computer science introductory course exercise, we group all accepted solutions by the used language.
-Regarding the \textsl{GCJ} we use 100\footnote{We have chosen 100 Submissions, because some higher rounds of the GCJ only have roughly 120 submissions in the C language. However, our setup and preparation allows for numbers far greater than that.} accepted Java and C solutions for each exercise. Regarding the introductory course, we use all supplied solutions. These have been manually verified for correctness by the author.
+Regarding the \textsl{GCJ} we use 100\footnote{We have chosen 100 submissions because some higher rounds of the GCJ only have roughly 120 submissions in the C language. However, our setup and preparation allow for numbers far greater than that.} accepted Java and C solutions for each exercise. Regarding the introductory course, we use all supplied solutions. These have been manually verified for correctness by the author.
 
 We run the tools mentioned above for each group applicable to the respective language and measure all detected clones.
 Considering that all solutions of each group solve the same exercise, we expect a very high rate of (potential \T4) clones.
@@ -557,10 +556,10 @@ All required modifications can be found in the GitHub-Repository: \urldate{https
 While Agec appears to be discontinued (the successor Agec2\footurl{https://github.com/tos-kamiya/agec2}{2022-03-01} is marked as such), building a Docker image turned out to be uncomplicated.
 We automated all required steps and manually searched through the source code in order to identify essential but undocumented flags (like the diagnostic flag, which prints out metrics regarding the detected n-grams).
 
-Because Agec needs to compile all Java sources to Java bytecode, we extended our extraction script of \cref{accepted-answers-gcj} to only select files that can be compiled inside of the Agec Docker image. In order to prevent problems with duplicated classes or references to different classes with the same name it further scrambles all class identifiers (consistently over multiple files of the same project).
-Please note that we do not guarantee the output to be collision-free. However, with randomly chosen 25-character long class names, we expect them to be different---ensuring collision-free names is outside of the scope of this paper.
+Because Agec needs to compile all Java sources to Java bytecode, we extended our extraction script of \cref{accepted-answers-gcj} to only select files that can be compiled inside of the Agec Docker image. In order to prevent problems with duplicated classes or references to different classes with the same name, it further scrambles all class identifiers (consistently over multiple files of the same submission).
+Please note that we do not guarantee that the output is collision-free. However, with randomly chosen 25-character long class names, we expect them to be different---ensuring collision-free names is outside of the scope of this paper.
 
-In order to validate the image, we re-run Agec on the example code presented with the original paper~\cite{6613854} and validate each step with the expected output automatically.
+In order to validate the Docker image, we re-run Agec on the example code presented with the original paper~\cite{6613854} and validate each step with the expected output automatically.
 
 \subsubsection{SourcererCC}
 In the context of the DéjàVu project~\cite{10.1145/3133908}, the authors of SourcererCC built a virtual machine that contains all necessary scripts and preconfigured databases for SourcererCC to run.
@@ -642,7 +641,7 @@ For each task, we used the solutions of all students that passed a manual verifi
     Vestigium & 271 & 170 & 169 & 12 & 12 \\
     \bottomrule
   \end{tabular}}\medskip
-  \caption{Clones detected in C language submissions to the GCJ. \textit{Total} refers to the total number of possible \enquote{comparison units} detected (i.e. possible clone candidates). For NICAD, \textit{Classes} represents identified clone groups, which do not differ for this analysis (i.e., every clone group holds one clone pair)}
+  \caption{Clones detected in C language submissions to the GCJ. \textit{Total} refers to the total number of possible \enquote{comparison units} detected (i.e. possible clone candidates). For NICAD, \textit{Classes} represents identified clone groups, which do not differ for this table (i.e., every clone group holds one clone pair)}
   \label{tbl:clones-c}
 \end{table}
 
@@ -661,12 +660,12 @@ For each task, we used the solutions of all students that passed a manual verifi
     Vestigium & all & 181 & 8\k3 & 282\k0 & 2915 & 1595 & 173 & 0 & 181 & 8 & 20 \\
     \bottomrule
   \end{tabular}}\medskip
-  \caption{Clones detected in Java language submissions to the GCJ. For Oreo it is possible to get more clones than there are block may share different subsets with other blocks.}
+  \caption{Clones detected in Java language submissions to the GCJ. For Oreo it is possible to get more clones than there are block, because blocks may share different subsets with other blocks. Agec differentiates between \enquote{distinct} n-grams as only those are considered for code clones.}
   \label{tbl:clones-java}
 \end{table*}
 
 \subsection{Used Setup}
-We performed all experiments and built all images on a Manjaro Linux 64 bit distribution\footurl{https://manjaro.org/}{2022-02-15} using Docker version 20.10.12 build \texttt{\href{https://github.com/docker/cli/tree/e91ed5707e038b02af3b5120fa0835c5bedfd42e}{e91ed5707e}} and at least 16 gigabytes of free RAM available at all times. Only one CCDT was run at a time.
+We performed all experiments and built all images on a Manjaro Linux 64 bit distribution\footurl{https://manjaro.org/}{2022-02-15} using Docker version 20.10.12 build \texttt{\href{https://github.com/docker/cli/tree/e91ed5707e038b02af3b5120fa0835c5bedfd42e}{e91ed5707e}} and at least 16 gigabytes of free RAM available at all times. We run only one CCDT at a time.
 The required time was measured using the POSIX command-line tool \texttt{time}.\footurl{https://linux.die.net/man/2/time}{2022-03-04}
 
 \section{Results}\label{sec:results}
@@ -703,7 +702,7 @@ We describe the results obtained by the GCJ and first-semester student submissio
     Vestigium               & 0:44 & 0:14 \\
     \bottomrule
   \end{tabular}\medskip
-  \caption{The time (in minutes) required by each tool for the given analysis of C sources.}
+  \caption{The time (in minutes) required by each tool for the given analysis of C sources. This excludes the build time of the docker image, but includes the startup time of the container.}
   \label{tbl:required-time-c}
 \end{table}
 
@@ -754,7 +753,7 @@ Due to the low sample size, the authors verified each identified potential clone
     Binary Tree & & & & 34 & 233 & 105 \\
     \bottomrule
   \end{tabular}\medskip
-  \caption{Solution sizes.}
+  \caption{Sizes (in lines of code) of the solutions submitted to the GCJ Problems and the university exercises. Only the selected samples are included.}
   \label{tbl:file-sizes}
 \end{table}
 
@@ -763,7 +762,7 @@ Due to the low sample size, the authors verified each identified potential clone
 \subsubsection{C Submissions}
 Looking at \cref{tbl:clones-c} the difference between clones found by CCCD and NICAD is enormous.
 However, when paired with the solutions sizes in \cref{tbl:file-sizes} it becomes apparent that some complete solutions to the GCJ are smaller than the minimum size threshold of NICAD to be detected as a clone (which is ten lines).
-Furthermore, most GCJ submissions use a rather generic and short main method while writing the solution as a standalone function~--- leading to even shorter potentially cloned CFs.
+Furthermore, most GCJ submissions use a rather generic and short main-method while writing the solution as a standalone function~--- leading to even shorter potentially cloned CFs.
 Therefore, NICADs approach of limiting code clones by their (pretty-printed) line size does fail.
 
 CCCD---on the other hand---does not have this limit. Therefore it matches clones regardless of their initial size.
@@ -781,7 +780,7 @@ The problem with SourcererCC will be discussed separately in \cref{problem:Sourc
 \subsection{University Students}
 Regarding the analysis of the submissions of the university students, Oreo proved to be surprisingly accurate, with no false positives (to the author's knowledge).
 The low clone count of Oreo regarding the \enquote{Binary Tree} exercise is due to the multitude of completely different strategies in solving this problem.
-While some students chose a naive approach of nested for-loops, some implemented balanced binary trees as linked datastructures, while others made use of binary-tree-specific characteristics.
+While some students chose a naive approach of nested for-loops, some implemented balanced binary trees as linked data structures, while others made use of binary-tree-specific characteristics.
 All CCDTs failed in assigning these approaches as clones.
 
 Nevertheless---at least for now---it is not to be expected that an arbitrary CCDT can understand the similarity in these completely different approaches.
@@ -808,7 +807,7 @@ Even more, all semantic code clone tools detect more clones overall, compared to
 However, interpreting the required time with \cref{tbl:required-time-c,tbl:required-time-java} is more difficult.
 While Oreo needs the most time, Agec is sometimes quicker than SourcererCC, albeit specifically designed for sematic clone detection.
 This might be either due to the overhead of using a Docker container~\cite{li2017performance} or
-simple because of the manual waits required to synchronize otherwise asynchronous tasks.
+simply because of the manual waits required to synchronize otherwise asynchronous tasks.
 
 Nevertheless, in general, semantic clone detection tends to be a lot slower (especially for larger datasets~\cite{SourcererCC}) than \T{1\,--\,3} detection.
 
@@ -854,7 +853,7 @@ We exclude the solutions of the first-semester students from this threat, as the
 The external validity describes the generalizability and transferability
 of the presented findings to other source codes and CCDTs.
 
-As every CCDT works differently, we can make no statement on the performance of other detection tools (even those, using the same techniques).
+As every CCDT works differently, we can make no statement on the performance of other detection tools (even those using the same techniques).
 Furthermore, all submissions to the GCJ and the computer science course are rather short (cf.~\cref{tbl:file-sizes}), especially when compared with large projects in the industry, and written by only one or two persons---not large teams. Moreover, due to the time constraint, we considered only a low number of submissions as well.
 Additionally, the solutions have been written in a short amount of time with no maintainability in mind,\footnote{The first-semester computer science students had a week to work on each exercise collection in a team of two.} possibly encouraging the use of repetitive patterns (e.g., reusing the same mechanism to split and join arrays over and over again) or the \enquote{first solution that comes to mind.}
 % \todo{most sind rauskopiert für generische Sachen (getLongArr)}
@@ -877,7 +876,7 @@ We have split the related work into two parts: \begin{inlist}
 
 \subsection{Code Clone Detection}
 We did---by far---not benchmark each CCDT there is~\cite{ain2019systematic}.
-In the following, we present a brief overview of some significant CCDTs and justify for each of them, why we did not select them for this work.
+In the following, we present a brief overview of some significant CCDTs and justify for each of them why we did not select them for this work.
 
 \subsubsection{Deckard}
 Deckard~\cite{Deckard} is a syntactic CCDT that is built to scale well for larger projects (just like SourcererCC as described in \cref{SourcererCC}) by using characteristic vectors.
@@ -926,7 +925,7 @@ We use those images to run benchmarks on the accepted submissions to the Google 
 Furthermore, we analyze and compare the produced results identifying the advantages of semantic code clone detection tools (especially Oreo).
 
 Nevertheless, it should be noted that while some research suggests strong evidence that code clones are harmful~\cite{juergens2009code},
-not all research considers every clones to be bad. For example, Kapser and Godfrey suggest that as many as \qty{71}\percent\ of all clones have a positive impact on the maintainability of a software system~\cite{kapser2008cloning}.
+not all research considers every clone to be bad. For example, Kapser and Godfrey suggest that as many as \qty{71}\percent\ of all clones have a positive impact on the maintainability of a software system~\cite{kapser2008cloning}.
 However, settling this debate is outside of the scope of this paper.
 
 \subsection{Future Work}
@@ -934,7 +933,7 @@ There is a lot of potential future work.
 \textbullet~One could adapt and include all CCDTs described and referenced alongside the related work in \cref{sec:related-work} in order to extend this kind of comparative and reproducible benchmark.
 \textbullet~Additionally, it would be interesting to replicate and extend the comparison of code written by \enquote{experienced programmers}, and \enquote{beginners}, potentially revealing interesting patterns in code clones and code reuse.
 This replication could include the examination of SourcererCC, which did not work in the context of our code clone detection benchmark.
-\textbullet~Regarding the amount of possible configurations (\cref{configuration}), it would be interesting to analyze how to tune the CCDTs to work better with a large amount of small solutions.
+\textbullet~Regarding the number of possible configurations (\cref{configuration}), it would be interesting to analyze how to tune the CCDTs to work better with a large number of small source codes.
 % Ein frohes wuff wuff an die Gemeinde. -- Hunde vor dem Fenster
 % Use functional languages
 
