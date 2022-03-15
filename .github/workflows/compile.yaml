@@ -20,7 +20,7 @@ jobs:
       run: |
         sudo apt install poppler-utils
         pip install sltx
-        echo "tx-default" | sltx docker
+        echo "tx-full" | sltx docker
     - name: ''
       run: |
         sltx compile --root --profile "tx-default" "atsfp-florian-sihler.tex"
